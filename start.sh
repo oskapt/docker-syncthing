@@ -3,6 +3,19 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+: ${GLUSTER_VOLUME:=ranchervol}}
+
+if [ -n "$GLUSTER_HOST" ]; then
+  # we have a gluster host, so let's try to mount it
+  mount -t glusterfs ${GLUSTER_HOST}:/${GLUSTER_VOLUME} /srv/data
+  rc=$?
+  if [ ! $rc -eq 0 ]; then
+    echo "Unable to mount ${GLUSTER_VOLUME} from ${GLUSTER_HOST}."
+    sleep 1
+    exit $rc
+  fi
+fi
+
 # if this if the first run, generate a useful config
 if [ ! -f /srv/config/config.xml ]; then
   echo "generating config"

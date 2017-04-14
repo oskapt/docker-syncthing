@@ -1,10 +1,15 @@
-# ubuntu 15 saves about 50MB over ubuntu stable
-FROM ubuntu:15.10
+FROM ubuntu:16.10
 
 RUN apt-get -qq update \
-  && apt-get -qq install curl ca-certificates -y --no-install-recommends \
+  && apt-get -qq -y install --no-install-recommends curl ca-certificates software-properties-common \
+  && add-apt-repository -y ppa:gluster/glusterfs-3.10 \
+  && add-apt-repository -y ppa:gluster/libntirpc \
+  && apt-get -qq update \
+  && apt-get install -qq -y glusterfs-client \
+  && apt-get -qq remove --purge -y software-properties-common \
   && apt-get -qq autoremove -y \
-  && apt-get -qq clean
+  && apt-get -qq clean \
+  && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # get dumb-init
 ENV DI_VERSION 1.2.0
@@ -15,7 +20,7 @@ RUN cd /tmp && \
 # get syncthing
 ENV SYNCTHING_VERSION 0.14.26
 WORKDIR /srv
-RUN useradd --no-create-home -g users syncthing
+
 RUN curl -sS -L -o syncthing.tar.gz https://github.com/syncthing/syncthing/releases/download/v$SYNCTHING_VERSION/syncthing-linux-amd64-v$SYNCTHING_VERSION.tar.gz \
   && tar -xzf syncthing.tar.gz \
   && rm -f syncthing.tar.gz \

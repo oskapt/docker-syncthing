@@ -1,26 +1,27 @@
-# docker-syncthing [![Docker Pulls](https://img.shields.io/docker/pulls/joeybaker/syncthing.svg)](https://registry.hub.docker.com/u/joeybaker/syncthing/)
+# docker-syncthing 
 
-Run [syncthing](https://syncthing.net) from a docker container
+Run [syncthing](https://syncthing.net) from a docker container. This is targeted for [Rancher](https://www.rancher.com)  and [Gluster](https://git.monach.us/rancher/glusterfs-server), although it could be used elsewhere. 
 
 ## Install
 ```sh
-docker pull joeybaker/syncthing
+docker pull monachus/syncthing
 ```
+
+## Environment Variables
+
+* `GLUSTER_HOST` - the hostname for your Gluster server
+  * if not provided, it will not mount anything on `/srv/data` before starting syncthing. If you want any sort of persistence, put a volume there.
+* `GLUSTER_VOLUME` - the volume from gluster to mount on `/srv/data` (default: `ranchervol`)
 
 ## Usage
 
-```sh
-docker run -d --restart=always \
-  -v /srv/sync:/srv/data \
-  -v /srv/syncthing:/srv/config \
-  -p 22000:22000 -p 21027:21027/udp -p 8080:8080 \
-  --name syncthing \
-  joeybaker/syncthing
-```
+1. Create a service called `syncthing` in your storage stack that pulls this image
+2. Map ports `22000` and `27017/udp` through to the container
+3. Mount a persistent volume at `/srv/config` for the configuration data.
+  * Use [NFS](https://git.monach.us/rancher/nfs-ganesha) with Gluster to make this persistent and flexible
+4. Set environment variables as defined above.
+5. (Optional) If not using Gluster, mount a volume on `/srv/data`.
+6. (Optional) Set a healthcheck on `22000/tcp`
+7. Set any labels and schedule it to run on your storage cluster.
+8. If you want [iNotify](https://git.monach.us/rancher/syncthing-inotify) support, add that as a sidekick now.
 
-If you want to add a new folder, make sure you set the path to something in `/srv/data`.
-
-**NOTE**: for security reasons, starting this docker container will change the permissions of all files in your data directory to a new, docker-only user. This ensures that the docker container can access the files.
-
-## Developing
-You can run `run.sh` to restart the bud-ssl terminator and syncthing. Any push to this repo will auto-update the docker image on docker hub.
