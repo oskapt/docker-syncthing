@@ -3,14 +3,14 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-: ${GLUSTER_VOLUME:=ranchervol}}
+: ${NFS_VOLUME:=ranchervol}}
 
-if [ -n "$GLUSTER_HOST" ]; then
-  # we have a gluster host, so let's try to mount it
-  mount -t glusterfs ${GLUSTER_HOST}:/${GLUSTER_VOLUME} /srv/data
+if [ -n "$NFS_HOST" ]; then
+  # we have an NFS host, so let's try to mount it
+  mount -t nfs ${NFS_HOST}:/${NFS_VOLUME} /srv/data
   rc=$?
   if [ ! $rc -eq 0 ]; then
-    echo "Unable to mount ${GLUSTER_VOLUME} from ${GLUSTER_HOST}."
+    echo "Unable to mount ${NFS_VOLUME} from ${NFS_HOST}."
     sleep 1
     exit $rc
   fi

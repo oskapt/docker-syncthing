@@ -1,12 +1,7 @@
 FROM ubuntu:16.10
 
 RUN apt-get -qq update \
-  && apt-get -qq -y install --no-install-recommends curl ca-certificates software-properties-common \
-  && add-apt-repository -y ppa:gluster/glusterfs-3.10 \
-  && add-apt-repository -y ppa:gluster/libntirpc \
-  && apt-get -qq update \
-  && apt-get install -qq -y glusterfs-client \
-  && apt-get -qq remove --purge -y software-properties-common \
+  && apt-get -qq -y install --no-install-recommends curl ca-certificates nfs-common \
   && apt-get -qq autoremove -y \
   && apt-get -qq clean \
   && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*

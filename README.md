@@ -17,11 +17,13 @@ docker pull monachus/syncthing
 
 1. Create a service called `syncthing` in your storage stack that pulls this image
 2. Map ports `22000` and `27017/udp` through to the container
-3. Mount a persistent volume at `/srv/config` for the configuration data.
+3. Set environment variables as defined above.
+4. Mount a persistent volume at `/srv/config` for the configuration data.
   * Use [NFS](https://git.monach.us/rancher/nfs-ganesha) with Gluster to make this persistent and flexible
-4. Set environment variables as defined above.
 5. (Optional) If not using Gluster, mount a volume on `/srv/data`.
-6. (Optional) Set a healthcheck on `22000/tcp`
-7. Set any labels and schedule it to run on your storage cluster.
-8. If you want [iNotify](https://git.monach.us/rancher/syncthing-inotify) support, add that as a sidekick now.
+6. Grant the container privileged access.
+7. Bind `/dev/fuse` on the host to `/dev/fuse` within the container
+8. (Optional) Set a healthcheck on `22000/tcp`
+9. Set any labels and schedule it to run on your storage cluster.
+10. If you want [iNotify](https://git.monach.us/rancher/syncthing-inotify) support, add that as a sidekick now.
 
