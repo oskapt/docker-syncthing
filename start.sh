@@ -3,19 +3,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-: ${NFS_VOLUME:=ranchervol}}
-
-if [ -n "$NFS_HOST" ]; then
-  # we have an NFS host, so let's try to mount it
-  mount -t nfs ${NFS_HOST}:/${NFS_VOLUME} /srv/data
-  rc=$?
-  if [ ! $rc -eq 0 ]; then
-    echo "Unable to mount ${NFS_VOLUME} from ${NFS_HOST}."
-    sleep 1
-    exit $rc
-  fi
-fi
-
 # if this if the first run, generate a useful config
 if [ ! -f /srv/config/config.xml ]; then
   echo "generating config"
