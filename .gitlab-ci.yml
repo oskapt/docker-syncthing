@@ -1,0 +1,37 @@
+variables:
+  REGISTRY_HOST: registry.monach.us
+  TEST_IMAGE: $REGISTRY_HOST/$CI_PROJECT_PATH:$CI_BUILD_REF_NAME
+  RELEASE_IMAGE: $REGISTRY_HOST/$CI_PROJECT_PATH:latest
+  DOCKER_IMAGE: monachus/$CI_PROJECT_NAME:latest
+  
+stages:
+  - build
+  - release
+
+before_script:
+  - docker info
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY_HOST
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t $TEST_IMAGE .
+    - docker push $TEST_IMAGE
+
+release:
+  stage: release
+  script:
+    - docker pull $TEST_IMAGE
+    - docker tag $TEST_IMAGE $RELEASE_IMAGE
+    - docker push $RELEASE_IMAGE
+  only:
+    - master
+
+push_to_docker_hub:
+  stage: release
+  script:
+    - docker login -u $HUB_USERNAME -p $HUB_PASSWORD
+    - docker tag $RELEASE_IMAGE $DOCKER_IMAGE
+    - docker push $DOCKER_IMAGE
+  only:
+    - master
