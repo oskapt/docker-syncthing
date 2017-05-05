@@ -13,5 +13,8 @@ if [ ! -f /srv/config/config.xml ]; then
   sed -e "s/<address>127.0.0.1:8384/<address>0.0.0.0:8080/" -i /srv/config/config.xml
 fi
 
+# no auto upgrades
+sed -Ee "s!<autoUpgradeIntervalH>[[:digit:]]+!<autoUpgradeIntervalH>0!" -i /srv/config/config.xml
+
 exec /srv/syncthing/syncthing -home=/srv/config
 
