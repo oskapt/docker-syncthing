@@ -10,7 +10,7 @@ docker pull monachus/syncthing
 ## Usage
 
 1. Create a service called `syncthing` in your storage stack that pulls this image
-2. Map ports `22000` and `27017/udp` through to the container
+2. Map ports `22000` and `21027/udp` through from the host to the container
 3. Create a `config` sidekick and mount a persistent volume at `/srv/config` for the configuration data.
 4. Add any data volumes you wish to replicate (such as volumes from Rancher NFS) and mount all volumes from `config`
   * Mount the data volumes beneath `/srv/data`
