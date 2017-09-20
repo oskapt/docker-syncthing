@@ -1,5 +1,3 @@
-# docker-syncthing 
-
 Run [syncthing](https://syncthing.net) from a docker container. This is targeted for [Rancher](https://www.rancher.com), although it could be used elsewhere. 
 
 ## Objective
