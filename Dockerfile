@@ -33,3 +33,8 @@ RUN chmod 770 /start.sh
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["/start.sh"]
 
+ARG VCS_REF
+ARG BUILD_DATE
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/oskapt/docker-syncthing"
