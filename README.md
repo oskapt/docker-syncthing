@@ -8,6 +8,12 @@ I wanted a simple solution that allowed me to do replication of files between Ra
 
 Rancher makes it easy to manage.
 
+## Variables
+
+The container sets sane defaults, but it recognizes run-time environment variables as follows:
+
+- `LISTEN_PORT` - The port to run the UI on (8080)
+
 ## Install
 ```sh
 docker pull monachus/syncthing

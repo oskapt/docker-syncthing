@@ -3,6 +3,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Set default LISTEN_PORT
+: ${LISTEN_PORT:=8080}
+
 # if this if the first run, generate a useful config
 if [ ! -f /srv/config/config.xml ]; then
   echo "generating config"
@@ -10,11 +13,14 @@ if [ ! -f /srv/config/config.xml ]; then
   # don't take the whole volume with the default so that we can add additional folders
   sed -E -e 's!id="default"(.*)path="/root/Sync/"!id="default"\1path="\/srv\/data\/st-default/"!' -i /srv/config/config.xml
   # ensure we can see the web ui outside of the docker container
-  sed -e "s/<address>127.0.0.1:8384/<address>0.0.0.0:8080/" -i /srv/config/config.xml
+  sed -e "s/<address>127.0.0.1:8384/<address>0.0.0.0:${LISTEN_PORT}/" -i /srv/config/config.xml
 fi
 
 # no auto upgrades
 sed -Ee "s!<autoUpgradeIntervalH>[[:digit:]]+!<autoUpgradeIntervalH>0!" -i /srv/config/config.xml
+
+# force listen port to be set
+sed -Ee "s/<address>0.0.0.0:[[:digit:]]+/<address>0.0.0.0:${LISTEN_PORT}/" -i /srv/config/config.xml
 
 exec /srv/syncthing/syncthing -home=/srv/config
 
