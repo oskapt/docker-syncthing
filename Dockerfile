@@ -1,4 +1,4 @@
-FROM ubuntu:16.10
+FROM ubuntu:17.10
 
 RUN apt-get -qq update \
   && apt-get -qq -y install --no-install-recommends curl ca-certificates nfs-common \
