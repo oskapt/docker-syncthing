@@ -1,4 +1,4 @@
-FROM ubuntu:16.10
+FROM ubuntu:18.10
 
 RUN apt-get -qq update \
   && apt-get -qq -y install --no-install-recommends curl ca-certificates nfs-common \
@@ -13,7 +13,7 @@ RUN cd /tmp && \
     chmod +x /bin/dumb-init
 
 # get syncthing
-ENV SYNCTHING_VERSION 0.14.26
+ENV SYNCTHING_VERSION 1.1.0
 WORKDIR /srv
 
 RUN curl -sS -L -o syncthing.tar.gz https://github.com/syncthing/syncthing/releases/download/v$SYNCTHING_VERSION/syncthing-linux-amd64-v$SYNCTHING_VERSION.tar.gz \
