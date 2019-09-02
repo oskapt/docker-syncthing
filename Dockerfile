@@ -7,13 +7,13 @@ RUN apt-get -qq update \
   && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # get dumb-init
-ENV DI_VERSION 1.2.0
+ENV DI_VERSION 1.2.2
 RUN cd /tmp && \
     curl -sL -o /bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DI_VERSION}/dumb-init_${DI_VERSION}_amd64 && \
     chmod +x /bin/dumb-init
 
 # get syncthing
-ENV SYNCTHING_VERSION 1.2.0
+ENV SYNCTHING_VERSION 1.2.2
 WORKDIR /srv
 
 RUN curl -sS -L -o syncthing.tar.gz https://github.com/syncthing/syncthing/releases/download/v$SYNCTHING_VERSION/syncthing-linux-amd64-v$SYNCTHING_VERSION.tar.gz \
